@@ -2,9 +2,13 @@ package main
 
 import (
 	"final-project/config/db"
-	"final-project/server/helper"
+	"final-project/server/controllers"
 	"final-project/server/repositories/gorm"
-	"fmt"
+	"final-project/server/router"
+	"final-project/server/services"
+	"os"
+
+	"github.com/joho/godotenv"
 )
 
 func main() {
@@ -14,12 +18,22 @@ func main() {
 		panic(err)
 	}
 
-	_ = gorm.NewUserRepository(db)
+	userRepo := gorm.NewUserRepository(db)
 	_ = gorm.NewPhotoRepository(db)
 	_ = gorm.NewCommentRepository(db)
 	_ = gorm.NewSocialMediaRepository(db)
 
-	token, err := helper.GenerateToken("fajar@gmail.com")
-	fmt.Printf("%# v", token)
-	// router := gin.Default()
+	userService := services.NewUserService(userRepo)
+
+	userController := controllers.NewUserController(userService)
+
+	app := router.NewRouter(userController)
+
+	err = godotenv.Load()
+
+	if err != nil {
+		panic(err)
+	}
+
+	app.SetupRouter(os.Getenv("PORT"))
 }
