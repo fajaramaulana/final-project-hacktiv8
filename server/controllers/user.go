@@ -36,5 +36,12 @@ func (c *UserController) Register(ctx *gin.Context) {
 		return
 	}
 
-	// user, err := c.service.Register(req)
+	user, err := c.service.Register(&req)
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, view.Error(http.StatusInternalServerError, err.Error()))
+		return
+	}
+
+	ctx.JSON(http.StatusCreated, user)
 }

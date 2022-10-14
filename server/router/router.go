@@ -19,6 +19,9 @@ func NewRouter(user *controllers.UserController) *router {
 }
 
 func (r *router) SetupRouter(port string) {
-	r.router.POST("/register", r.user.Register)
+	v1 := r.router.Group("/api/v1")
+
+	user := v1.Group("/users")
+	user.POST("/register", r.user.Register)
 	r.router.Run(port)
 }

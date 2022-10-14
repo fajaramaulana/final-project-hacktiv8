@@ -3,7 +3,7 @@ package repositories
 import "final-project/server/repositories/models"
 
 type UserRepo interface {
-	Create(user *models.User) error
+	Create(user *models.User) (int, error)
 	FindByID(id int) (*models.User, error)
 	FindByEmail(email string) (*models.User, error)
 	Update(user *models.User) error

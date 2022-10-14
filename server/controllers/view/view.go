@@ -13,3 +13,10 @@ func ErrorValidation(status int, message string, payload map[string]string) *Res
 		Payload: payload,
 	}
 }
+
+func Error(status int, message string) *Response {
+	return &Response{
+		Status:  status,
+		Message: message,
+	}
+}
