@@ -6,7 +6,7 @@ type UserRepo interface {
 	Create(user *models.User) (int, error)
 	FindByID(id int) (*models.User, error)
 	FindByEmail(email string) (*models.User, error)
-	Update(user *models.User) error
+	UpdateById(id int, update *models.User) (*models.User, error)
 	Delete(user *models.User) error
 }
 

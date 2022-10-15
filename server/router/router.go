@@ -2,6 +2,7 @@ package router
 
 import (
 	"final-project/server/controllers"
+	"final-project/server/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -19,9 +20,9 @@ func NewRouter(user *controllers.UserController) *router {
 }
 
 func (r *router) SetupRouter(port string) {
-	v1 := r.router.Group("/api/v1")
-
-	user := v1.Group("/users")
+	user := r.router.Group("/users")
 	user.POST("/register", r.user.Register)
+	user.POST("/login", r.user.Login)
+	user.PUT("/:userid", middleware.Authentication, r.user.Update)
 	r.router.Run(port)
 }

@@ -42,5 +42,49 @@ func (s *UserService) Register(req *request.CreateUserRequest) (map[string]inter
 		"id":       userId,
 		"username": user.Username,
 	}, nil
+}
 
+func (s *UserService) Login(req *request.UserLoginRequest) (string, error) {
+	data, err := s.userRepo.FindByEmail(req.Email)
+
+	if err != nil {
+		return "", err
+	}
+	err = bcrypt.CompareHashAndPassword([]byte(data.Password), []byte(req.Password))
+
+	if err != nil {
+		return "", err
+	}
+
+	return req.Email, nil
+}
+
+func (s *UserService) Update(id int, req *request.UpdateUserRequest) (map[string]interface{}, error) {
+	var user models.User
+	user.Username = req.Username
+	user.Email = req.Email
+
+	data, err := s.userRepo.UpdateById(id, &user)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return map[string]interface{}{
+		"id":         data.Id,
+		"email":      data.Email,
+		"username":   data.Username,
+		"age":        data.Age,
+		"updated_at": data.UpdatedAt,
+	}, nil
+}
+
+func (s *UserService) GetUserIdByEmail(email string) (int, error) {
+	data, err := s.userRepo.FindByEmail(email)
+
+	if err != nil {
+		return 0, err
+	}
+
+	return data.Id, nil
 }

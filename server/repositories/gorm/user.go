@@ -34,8 +34,11 @@ func (r *userRepo) FindByEmail(email string) (*models.User, error) {
 	return &user, err
 }
 
-func (r *userRepo) Update(user *models.User) error {
-	return r.db.Save(user).Error
+func (r *userRepo) UpdateById(id int, update *models.User) (*models.User, error) {
+	var user models.User
+	err := r.db.Debug().Where("id=?", id).Updates(update).First(&user, "id=?", id).Error
+
+	return &user, err
 }
 
 func (r *userRepo) Delete(user *models.User) error {

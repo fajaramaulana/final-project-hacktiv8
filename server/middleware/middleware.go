@@ -14,7 +14,8 @@ func Authentication(ctx *gin.Context) {
 
 	if len(tokenArr) != 2 {
 		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-			"error": "Unauthorized",
+			"status": http.StatusUnauthorized,
+			"error":  "Unauthorized",
 		})
 		return
 	}
@@ -25,7 +26,16 @@ func Authentication(ctx *gin.Context) {
 
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-			"error": err.Error(),
+			"status": http.StatusUnauthorized,
+			"error":  err.Error(),
+		})
+		return
+	}
+
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+			"status": http.StatusUnauthorized,
+			"error":  err.Error(),
 		})
 		return
 	}
