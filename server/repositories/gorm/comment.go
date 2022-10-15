@@ -29,10 +29,29 @@ func (r *commentRepo) GetAllComment() ([]models.Comment, error) {
 	return comment, err
 }
 
-func (r *commentRepo) UpdateCommentById(id int, comment *models.Comment) error {
-	return r.db.Where("id = ?", id).Updates(comment).Error
+func (r *commentRepo) UpdateCommentById(id int, comment *models.Comment) (*models.Comment, error) {
+	if err := r.db.Debug().Where("id = ?", id).Updates(&comment).Preload(clause.Associations).Find(&comment).Error; err != nil {
+		return nil, err
+	}
+
+	return comment, nil
 }
 
 func (r *commentRepo) DelteCommentById(id int) error {
 	return r.db.Where("id = ?", id).Delete(&models.Comment{}).Error
+}
+
+func (r *commentRepo) GetCommentById(id int) (*models.Comment, error) {
+	var comment models.Comment
+	err := r.db.Preload(clause.Associations).Where("id = ?", id).First(&comment).Error
+	return &comment, err
+}
+
+func (r *commentRepo) CheckCommentByIdAndUserId(id int, userId int) (bool, error) {
+	var comment models.Comment
+	err := r.db.Where("id = ? AND user_id = ?", id, userId).First(&comment).Error
+	if err != nil {
+		return false, err
+	}
+	return true, nil
 }

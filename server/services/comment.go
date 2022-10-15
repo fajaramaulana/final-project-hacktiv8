@@ -1,10 +1,12 @@
 package services
 
 import (
+	"errors"
 	"final-project/server/controllers/view"
 	"final-project/server/repositories"
 	"final-project/server/repositories/models"
 	"final-project/server/request"
+	"fmt"
 	"time"
 )
 
@@ -71,4 +73,33 @@ func (s *CommentService) GetAll() ([]view.ResponseGetAllComment, error) {
 	}
 
 	return response, nil
+}
+
+func (s *CommentService) Update(idUser int, idComment int, req *request.UpdateCommentRequest) (view.ResponseUpdateComment, error) {
+	var comment models.Comment
+
+	comment.Message = req.Message
+
+	checkIfExist, err := s.commentRepo.CheckCommentByIdAndUserId(idComment, idUser)
+
+	if !checkIfExist {
+		return view.ResponseUpdateComment{}, errors.New("Unauthorized")
+	}
+
+	data, err := s.commentRepo.UpdateCommentById(idComment, &comment)
+
+	fmt.Printf("%# v", data)
+
+	if err != nil {
+		return view.ResponseUpdateComment{}, err
+	}
+
+	return view.ResponseUpdateComment{
+		Id:        data.Id,
+		Title:     data.Photo.Title,
+		Caption:   data.Photo.Caption,
+		PhotoUrl:  data.Photo.PhotoUrl,
+		UserId:    data.UserId,
+		UpdatedAt: data.UpdatedAt,
+	}, nil
 }

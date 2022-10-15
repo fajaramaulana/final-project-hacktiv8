@@ -23,8 +23,10 @@ type PhotoRepo interface {
 type CommentRepo interface {
 	Create(comment *models.Comment) (*models.Comment, error)
 	GetAllComment() ([]models.Comment, error)
-	UpdateCommentById(id int, comment *models.Comment) error
+	UpdateCommentById(id int, comment *models.Comment) (*models.Comment, error)
 	DelteCommentById(id int) error
+	GetCommentById(id int) (*models.Comment, error)
+	CheckCommentByIdAndUserId(id int, userId int) (bool, error)
 }
 
 type SocialMediaRepo interface {

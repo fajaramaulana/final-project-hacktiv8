@@ -6,6 +6,7 @@ import (
 	"final-project/server/request"
 	"final-project/server/services"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -73,4 +74,45 @@ func (c *CommentController) GetAll(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, data)
+}
+
+func (c *CommentController) Update(ctx *gin.Context) {
+	var req request.UpdateCommentRequest
+	idComment := ctx.Param("commentid")
+
+	commentId, err := strconv.Atoi(idComment)
+
+	email := ctx.GetString("email")
+
+	idUser, err := c.userService.GetUserIdByEmail(email)
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, view.Error(http.StatusInternalServerError, err.Error()))
+		return
+	}
+
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"status": http.StatusBadRequest,
+			"error":  err.Error(),
+		})
+		return
+	}
+
+	res := helper.DoValidation(req)
+
+	if len(res) > 0 {
+		ctx.JSON(http.StatusBadRequest, view.ErrorValidation(http.StatusBadRequest, "Error Validation", res))
+		return
+	}
+
+	data, err := c.commentService.Update(idUser, commentId, &req)
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, view.Error(http.StatusInternalServerError, err.Error()))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, data)
+
 }
