@@ -5,6 +5,7 @@ import (
 	"final-project/server/repositories/models"
 
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type photoRepo struct {
@@ -22,10 +23,10 @@ func (r *photoRepo) Create(photo *models.Photo) (*models.Photo, error) {
 	return photo, err
 }
 
-func (r *photoRepo) GetAllPhoto() (*models.Photo, error) {
-	var photo models.Photo
-	err := r.db.Find(&photo).Error
-	return &photo, err
+func (r *photoRepo) GetAllPhoto() ([]models.Photo, error) {
+	var photo []models.Photo
+	err := r.db.Preload(clause.Associations).Find(&photo).Error
+	return photo, err
 }
 
 func (r *photoRepo) UpdatePhotoById(id int, photo *models.Photo) error {

@@ -13,7 +13,7 @@ type UserRepo interface {
 
 type PhotoRepo interface {
 	Create(photo *models.Photo) (*models.Photo, error)
-	GetAllPhoto() (*models.Photo, error)
+	GetAllPhoto() ([]models.Photo, error)
 	UpdatePhotoById(id int, photo *models.Photo) error
 	DeletePhotoById(id int) error
 }
