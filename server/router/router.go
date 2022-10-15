@@ -32,6 +32,7 @@ func (r *router) SetupRouter(port string) {
 	photo.POST("", middleware.Authentication, r.photo.Create)
 	photo.GET("", middleware.Authentication, r.photo.GetAll)
 	photo.PUT(":photoid", middleware.Authentication, r.photo.Update)
+	photo.DELETE(":photoid", middleware.Authentication, r.photo.Delete)
 
 	r.router.Run(port)
 }

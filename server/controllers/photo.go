@@ -5,7 +5,6 @@ import (
 	"final-project/server/helper"
 	"final-project/server/request"
 	"final-project/server/services"
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -104,7 +103,6 @@ func (c PhotoController) Update(ctx *gin.Context) {
 
 	data, err := c.photoService.Update(&req, idPhoto, userId)
 
-	fmt.Printf("%# v", err)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, view.Error(http.StatusInternalServerError, err.Error()))
 		return
@@ -112,4 +110,32 @@ func (c PhotoController) Update(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, data)
 
+}
+
+func (c PhotoController) Delete(ctx *gin.Context) {
+	id := ctx.Param("photoid")
+	email := ctx.GetString("email")
+
+	idPhoto, err := strconv.Atoi(id)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, view.Error(http.StatusBadRequest, err.Error()))
+		return
+	}
+
+	userId, err := c.userService.GetUserIdByEmail(email)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, view.Error(http.StatusBadRequest, err.Error()))
+		return
+	}
+
+	data, err := c.photoService.Delete(idPhoto, userId)
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, view.Error(http.StatusInternalServerError, err.Error()))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, data)
 }

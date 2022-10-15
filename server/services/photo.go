@@ -1,6 +1,7 @@
 package services
 
 import (
+	"errors"
 	"final-project/server/controllers/view"
 	"final-project/server/repositories"
 	"final-project/server/repositories/models"
@@ -76,7 +77,13 @@ func (s *PhotoService) Update(req *request.UpdatePhotoRequest, id int, idUser in
 	photo.PhotoUrl = req.PhotoUrl
 	photo.UserId = idUser
 
-	data, err := s.photoRepo.UpdatePhotoByIdAndUserId(id, idUser, &photo)
+	checkIfExist, err := s.photoRepo.CheckPhotoByIdAndUserId(id, idUser)
+
+	if !checkIfExist {
+		return view.ResponseUpdatePhoto{}, errors.New("Unauthorized")
+	}
+
+	data, err := s.photoRepo.UpdatePhotoById(id, &photo)
 
 	if err != nil {
 		return view.ResponseUpdatePhoto{}, err
@@ -91,4 +98,22 @@ func (s *PhotoService) Update(req *request.UpdatePhotoRequest, id int, idUser in
 		UpdatedAt: data.UpdatedAt,
 	}, nil
 
+}
+
+func (s *PhotoService) Delete(id int, idUser int) (view.ResponseDeletePhoto, error) {
+	checkIfExist, err := s.photoRepo.CheckPhotoByIdAndUserId(id, idUser)
+
+	if !checkIfExist {
+		return view.ResponseDeletePhoto{}, errors.New("Unauthorized")
+	}
+
+	err = s.photoRepo.DeletePhotoById(id)
+
+	if err != nil {
+		return view.ResponseDeletePhoto{}, err
+	}
+
+	return view.ResponseDeletePhoto{
+		Message: "Your Photo has been successfully deleted",
+	}, nil
 }

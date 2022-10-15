@@ -29,9 +29,18 @@ func (r *photoRepo) GetAllPhoto() ([]models.Photo, error) {
 	return photo, err
 }
 
-func (r *photoRepo) UpdatePhotoByIdAndUserId(id int, idUser int, photo *models.Photo) (*models.Photo, error) {
+func (r *photoRepo) CheckPhotoByIdAndUserId(id int, userId int) (bool, error) {
+	var photo models.Photo
+	err := r.db.Where("id = ? AND user_id = ?", id, userId).First(&photo).Error
+	if err != nil {
+		return false, err
+	}
+	return true, nil
+}
 
-	if err := r.db.Debug().Where("id = ? AND user_id = ?", id, idUser).Updates(&photo).First(&photo).Error; err != nil {
+func (r *photoRepo) UpdatePhotoById(id int, photo *models.Photo) (*models.Photo, error) {
+
+	if err := r.db.Debug().Where("id = ?", id).Updates(&photo).First(&photo).Error; err != nil {
 		return nil, err
 	}
 

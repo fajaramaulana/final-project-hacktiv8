@@ -14,7 +14,8 @@ type UserRepo interface {
 type PhotoRepo interface {
 	Create(photo *models.Photo) (*models.Photo, error)
 	GetAllPhoto() ([]models.Photo, error)
-	UpdatePhotoByIdAndUserId(id int, idUser int, photo *models.Photo) (*models.Photo, error)
+	UpdatePhotoById(id int, photo *models.Photo) (*models.Photo, error)
+	CheckPhotoByIdAndUserId(id int, userId int) (bool, error)
 	DeletePhotoById(id int) error
 }
 
