@@ -41,6 +41,7 @@ func (r *router) SetupRouter(port string) {
 	comment.POST("", middleware.Authentication, r.comment.Create)
 	comment.GET("", middleware.Authentication, r.comment.GetAll)
 	comment.PUT(":commentid", middleware.Authentication, r.comment.Update)
+	comment.DELETE(":commentid", middleware.Authentication, r.comment.Delete)
 
 	r.router.Run(port)
 }

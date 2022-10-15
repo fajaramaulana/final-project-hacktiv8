@@ -116,3 +116,29 @@ func (c *CommentController) Update(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, data)
 
 }
+
+func (c *CommentController) Delete(ctx *gin.Context) {
+	idComment := ctx.Param("commentid")
+
+	commentId, err := strconv.Atoi(idComment)
+
+	email := ctx.GetString("email")
+
+	idUser, err := c.userService.GetUserIdByEmail(email)
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, view.Error(http.StatusInternalServerError, err.Error()))
+		return
+	}
+
+	err = c.commentService.Delete(idUser, commentId)
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, view.Error(http.StatusInternalServerError, err.Error()))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, view.ResponseDeleteComment{
+		Message: "Your comment has been successfully deleted",
+	})
+}

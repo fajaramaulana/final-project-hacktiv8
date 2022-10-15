@@ -6,7 +6,6 @@ import (
 	"final-project/server/repositories"
 	"final-project/server/repositories/models"
 	"final-project/server/request"
-	"fmt"
 	"time"
 )
 
@@ -88,8 +87,6 @@ func (s *CommentService) Update(idUser int, idComment int, req *request.UpdateCo
 
 	data, err := s.commentRepo.UpdateCommentById(idComment, &comment)
 
-	fmt.Printf("%# v", data)
-
 	if err != nil {
 		return view.ResponseUpdateComment{}, err
 	}
@@ -102,4 +99,20 @@ func (s *CommentService) Update(idUser int, idComment int, req *request.UpdateCo
 		UserId:    data.UserId,
 		UpdatedAt: data.UpdatedAt,
 	}, nil
+}
+
+func (s *CommentService) Delete(idUser int, idComment int) error {
+	checkIfExist, err := s.commentRepo.CheckCommentByIdAndUserId(idComment, idUser)
+
+	if !checkIfExist {
+		return errors.New("Unauthorized")
+	}
+
+	err = s.commentRepo.DelteCommentById(idComment)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

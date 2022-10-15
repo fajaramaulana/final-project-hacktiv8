@@ -29,3 +29,7 @@ type ResponseUpdateComment struct {
 	UserId    int       `json:"user_id"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
+
+type ResponseDeleteComment struct {
+	Message string `json:"message"`
+}
