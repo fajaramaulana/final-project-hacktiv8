@@ -31,6 +31,7 @@ func (r *router) SetupRouter(port string) {
 	photo := r.router.Group("/photos")
 	photo.POST("", middleware.Authentication, r.photo.Create)
 	photo.GET("", middleware.Authentication, r.photo.GetAll)
+	photo.PUT(":photoid", middleware.Authentication, r.photo.Update)
 
 	r.router.Run(port)
 }

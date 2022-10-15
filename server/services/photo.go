@@ -67,3 +67,28 @@ func (s *PhotoService) GetAll() ([]view.ResponseGetAllPhoto, error) {
 	return response, nil
 
 }
+
+func (s *PhotoService) Update(req *request.UpdatePhotoRequest, id int, idUser int) (view.ResponseUpdatePhoto, error) {
+	var photo models.Photo
+
+	photo.Title = req.Title
+	photo.Caption = req.Caption
+	photo.PhotoUrl = req.PhotoUrl
+	photo.UserId = idUser
+
+	data, err := s.photoRepo.UpdatePhotoByIdAndUserId(id, idUser, &photo)
+
+	if err != nil {
+		return view.ResponseUpdatePhoto{}, err
+	}
+
+	return view.ResponseUpdatePhoto{
+		Id:        data.Id,
+		Title:     data.Title,
+		Caption:   data.Caption,
+		PhotoUrl:  data.PhotoUrl,
+		UserId:    data.UserId,
+		UpdatedAt: data.UpdatedAt,
+	}, nil
+
+}
