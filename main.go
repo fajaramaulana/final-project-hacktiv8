@@ -19,15 +19,17 @@ func main() {
 	}
 
 	userRepo := gorm.NewUserRepository(db)
-	_ = gorm.NewPhotoRepository(db)
+	userService := services.NewUserService(userRepo)
+	userController := controllers.NewUserController(userService)
+
+	photoRepo := gorm.NewPhotoRepository(db)
+	photoService := services.NewPhotoService(photoRepo)
+	photoController := controllers.NewPhotoController(photoService, userService)
+
 	_ = gorm.NewCommentRepository(db)
 	_ = gorm.NewSocialMediaRepository(db)
 
-	userService := services.NewUserService(userRepo)
-
-	userController := controllers.NewUserController(userService)
-
-	app := router.NewRouter(userController)
+	app := router.NewRouter(userController, photoController)
 
 	err = godotenv.Load()
 

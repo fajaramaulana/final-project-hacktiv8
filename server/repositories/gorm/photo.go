@@ -17,8 +17,9 @@ func NewPhotoRepository(db *gorm.DB) repositories.PhotoRepo {
 	}
 }
 
-func (r *photoRepo) Create(photo *models.Photo) error {
-	return r.db.Create(photo).Error
+func (r *photoRepo) Create(photo *models.Photo) (*models.Photo, error) {
+	err := r.db.Create(photo).Error
+	return photo, err
 }
 
 func (r *photoRepo) GetAllPhoto() (*models.Photo, error) {
