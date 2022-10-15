@@ -5,6 +5,7 @@ import (
 	"final-project/server/repositories/models"
 
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type commentRepo struct {
@@ -22,10 +23,10 @@ func (r *commentRepo) Create(comment *models.Comment) (*models.Comment, error) {
 	return comment, err
 }
 
-func (r *commentRepo) GetAllComment() (*models.Comment, error) {
-	var comment models.Comment
-	err := r.db.Find(&comment).Error
-	return &comment, err
+func (r *commentRepo) GetAllComment() ([]models.Comment, error) {
+	var comment []models.Comment
+	err := r.db.Preload(clause.Associations).Find(&comment).Error
+	return comment, err
 }
 
 func (r *commentRepo) UpdateCommentById(id int, comment *models.Comment) error {

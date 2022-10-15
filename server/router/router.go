@@ -39,6 +39,7 @@ func (r *router) SetupRouter(port string) {
 	comment := r.router.Group("/comments")
 
 	comment.POST("", middleware.Authentication, r.comment.Create)
+	comment.GET("", middleware.Authentication, r.comment.GetAll)
 
 	r.router.Run(port)
 }

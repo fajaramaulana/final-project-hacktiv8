@@ -4,3 +4,9 @@ type ResponseWithUserId struct {
 	Email    string `json:"email"`
 	Username string `json:"username"`
 }
+
+type ResponseWithUserIdComment struct {
+	Id       int    `json:"id"`
+	Email    string `json:"email"`
+	Username string `json:"username"`
+}

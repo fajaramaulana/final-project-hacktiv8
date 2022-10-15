@@ -63,3 +63,14 @@ func (c *CommentController) Create(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusCreated, data)
 }
+
+func (c *CommentController) GetAll(ctx *gin.Context) {
+	data, err := c.commentService.GetAll()
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, view.Error(http.StatusInternalServerError, err.Error()))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, data)
+}
