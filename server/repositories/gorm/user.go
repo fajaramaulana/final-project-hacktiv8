@@ -44,3 +44,9 @@ func (r *userRepo) UpdateById(id int, update *models.User) (*models.User, error)
 func (r *userRepo) Delete(user *models.User) error {
 	return r.db.Delete(user).Error
 }
+
+func (r *userRepo) DeleteByEmail(email string) error {
+	var user models.User
+	err := r.db.Where("email = ?", email).Delete(&user).Error
+	return err
+}

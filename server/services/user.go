@@ -79,6 +79,18 @@ func (s *UserService) Update(id int, req *request.UpdateUserRequest) (map[string
 	}, nil
 }
 
+func (s *UserService) Delete(email string) (map[string]interface{}, error) {
+	err := s.userRepo.DeleteByEmail(email)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return map[string]interface{}{
+		"message": "Your account has been successfully deleted",
+	}, nil
+}
+
 func (s *UserService) GetUserIdByEmail(email string) (int, error) {
 	data, err := s.userRepo.FindByEmail(email)
 

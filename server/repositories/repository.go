@@ -8,6 +8,7 @@ type UserRepo interface {
 	FindByEmail(email string) (*models.User, error)
 	UpdateById(id int, update *models.User) (*models.User, error)
 	Delete(user *models.User) error
+	DeleteByEmail(email string) error
 }
 
 type PhotoRepo interface {

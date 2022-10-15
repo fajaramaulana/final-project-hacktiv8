@@ -127,3 +127,16 @@ func (c *UserController) Update(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, user)
 }
+
+func (c *UserController) Delete(ctx *gin.Context) {
+	email := ctx.GetString("email")
+
+	data, err := c.service.Delete(email)
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, view.Error(http.StatusInternalServerError, err.Error()))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, data)
+}

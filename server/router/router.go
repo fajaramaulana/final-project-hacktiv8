@@ -24,5 +24,6 @@ func (r *router) SetupRouter(port string) {
 	user.POST("/register", r.user.Register)
 	user.POST("/login", r.user.Login)
 	user.PUT("/:userid", middleware.Authentication, r.user.Update)
+	user.DELETE("/", middleware.Authentication, r.user.Delete)
 	r.router.Run(port)
 }
