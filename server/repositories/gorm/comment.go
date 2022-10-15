@@ -17,8 +17,9 @@ func NewCommentRepository(db *gorm.DB) repositories.CommentRepo {
 	}
 }
 
-func (r *commentRepo) Create(comment *models.Comment) error {
-	return r.db.Create(comment).Error
+func (r *commentRepo) Create(comment *models.Comment) (*models.Comment, error) {
+	err := r.db.Create(comment).Error
+	return comment, err
 }
 
 func (r *commentRepo) GetAllComment() (*models.Comment, error) {

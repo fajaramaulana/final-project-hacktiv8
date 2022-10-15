@@ -8,16 +8,18 @@ import (
 )
 
 type router struct {
-	router *gin.Engine
-	user   *controllers.UserController
-	photo  *controllers.PhotoController
+	router  *gin.Engine
+	user    *controllers.UserController
+	photo   *controllers.PhotoController
+	comment *controllers.CommentController
 }
 
-func NewRouter(user *controllers.UserController, photo *controllers.PhotoController) *router {
+func NewRouter(user *controllers.UserController, photo *controllers.PhotoController, comment *controllers.CommentController) *router {
 	return &router{
-		router: gin.Default(),
-		user:   user,
-		photo:  photo,
+		router:  gin.Default(),
+		user:    user,
+		photo:   photo,
+		comment: comment,
 	}
 }
 
@@ -33,6 +35,10 @@ func (r *router) SetupRouter(port string) {
 	photo.GET("", middleware.Authentication, r.photo.GetAll)
 	photo.PUT(":photoid", middleware.Authentication, r.photo.Update)
 	photo.DELETE(":photoid", middleware.Authentication, r.photo.Delete)
+
+	comment := r.router.Group("/comments")
+
+	comment.POST("", middleware.Authentication, r.comment.Create)
 
 	r.router.Run(port)
 }

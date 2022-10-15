@@ -117,3 +117,13 @@ func (s *PhotoService) Delete(id int, idUser int) (view.ResponseDeletePhoto, err
 		Message: "Your Photo has been successfully deleted",
 	}, nil
 }
+
+func (s *PhotoService) GetPhotoById(id int) (bool, error) {
+	_, err := s.photoRepo.GetPhotoById(id)
+
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
+}

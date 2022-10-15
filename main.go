@@ -26,10 +26,13 @@ func main() {
 	photoService := services.NewPhotoService(photoRepo)
 	photoController := controllers.NewPhotoController(photoService, userService)
 
-	_ = gorm.NewCommentRepository(db)
+	commentRepo := gorm.NewCommentRepository(db)
+	commentService := services.NewCommentService(commentRepo)
+	commentController := controllers.NewCommentController(commentService, userService, photoService)
+
 	_ = gorm.NewSocialMediaRepository(db)
 
-	app := router.NewRouter(userController, photoController)
+	app := router.NewRouter(userController, photoController, commentController)
 
 	err = godotenv.Load()
 

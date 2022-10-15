@@ -17,10 +17,11 @@ type PhotoRepo interface {
 	UpdatePhotoById(id int, photo *models.Photo) (*models.Photo, error)
 	CheckPhotoByIdAndUserId(id int, userId int) (bool, error)
 	DeletePhotoById(id int) error
+	GetPhotoById(id int) (*models.Photo, error)
 }
 
 type CommentRepo interface {
-	Create(comment *models.Comment) error
+	Create(comment *models.Comment) (*models.Comment, error)
 	GetAllComment() (*models.Comment, error)
 	UpdateCommentById(id int, comment *models.Comment) error
 	DelteCommentById(id int) error
