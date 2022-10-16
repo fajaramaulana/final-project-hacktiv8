@@ -12,14 +12,16 @@ type router struct {
 	user    *controllers.UserController
 	photo   *controllers.PhotoController
 	comment *controllers.CommentController
+	socmed  *controllers.SocmedController
 }
 
-func NewRouter(user *controllers.UserController, photo *controllers.PhotoController, comment *controllers.CommentController) *router {
+func NewRouter(user *controllers.UserController, photo *controllers.PhotoController, comment *controllers.CommentController, socmed *controllers.SocmedController) *router {
 	return &router{
 		router:  gin.Default(),
 		user:    user,
 		photo:   photo,
 		comment: comment,
+		socmed:  socmed,
 	}
 }
 
@@ -37,11 +39,14 @@ func (r *router) SetupRouter(port string) {
 	photo.DELETE(":photoid", middleware.Authentication, r.photo.Delete)
 
 	comment := r.router.Group("/comments")
-
 	comment.POST("", middleware.Authentication, r.comment.Create)
 	comment.GET("", middleware.Authentication, r.comment.GetAll)
 	comment.PUT(":commentid", middleware.Authentication, r.comment.Update)
 	comment.DELETE(":commentid", middleware.Authentication, r.comment.Delete)
+
+	socmed := r.router.Group("/socialmedias")
+	socmed.POST("", middleware.Authentication, r.socmed.Create)
+	socmed.GET("", middleware.Authentication, r.socmed.Get)
 
 	r.router.Run(port)
 }

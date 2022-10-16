@@ -10,3 +10,9 @@ type ResponseWithUserIdComment struct {
 	Email    string `json:"email"`
 	Username string `json:"username"`
 }
+
+type ResponseWithUserIdSocmed struct {
+	Id              int    `json:"id"`
+	Username        string `json:"username"`
+	ProfileImageUrl string `json:"profile_image_url"`
+}

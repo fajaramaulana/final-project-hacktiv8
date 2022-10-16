@@ -5,6 +5,7 @@ import (
 	"final-project/server/repositories/models"
 
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type socialMediaRepo struct {
@@ -17,14 +18,21 @@ func NewSocialMediaRepository(db *gorm.DB) repositories.SocialMediaRepo {
 	}
 }
 
-func (r *socialMediaRepo) Create(socialMedia *models.SocialMedia) error {
-	return r.db.Create(socialMedia).Error
+func (r *socialMediaRepo) Create(socialMedia *models.SocialMedia) (*models.SocialMedia, error) {
+	err := r.db.Create(socialMedia).Error
+	return socialMedia, err
 }
 
 func (r *socialMediaRepo) GetAllSocialMedia() (*models.SocialMedia, error) {
 	var socialMedia models.SocialMedia
 	err := r.db.Find(&socialMedia).Error
 	return &socialMedia, err
+}
+
+func (r *socialMediaRepo) GetSocmedByUserId(id int) ([]models.SocialMedia, error) {
+	var socialMedia []models.SocialMedia
+	err := r.db.Preload(clause.Associations).Where("user_id = ?", id).Find(&socialMedia).Error
+	return socialMedia, err
 }
 
 func (r *socialMediaRepo) UpdateSocialMediaById(id int, socialMedia *models.SocialMedia) error {

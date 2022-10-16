@@ -30,8 +30,9 @@ type CommentRepo interface {
 }
 
 type SocialMediaRepo interface {
-	Create(socialMedia *models.SocialMedia) error
+	Create(socialMedia *models.SocialMedia) (*models.SocialMedia, error)
 	GetAllSocialMedia() (*models.SocialMedia, error)
+	GetSocmedByUserId(id int) ([]models.SocialMedia, error)
 	UpdateSocialMediaById(id int, socialMedia *models.SocialMedia) error
 	DeleteSocialMediaById(id int) error
 	GetSocialMediaById(id int) (*models.SocialMedia, error)

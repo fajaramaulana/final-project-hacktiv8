@@ -30,9 +30,11 @@ func main() {
 	commentService := services.NewCommentService(commentRepo)
 	commentController := controllers.NewCommentController(commentService, userService, photoService)
 
-	_ = gorm.NewSocialMediaRepository(db)
+	socmedRepo := gorm.NewSocialMediaRepository(db)
+	socmedService := services.NewSocialMediaService(socmedRepo)
+	socmedController := controllers.NewSocmedController(socmedService, userService)
 
-	app := router.NewRouter(userController, photoController, commentController)
+	app := router.NewRouter(userController, photoController, commentController, socmedController)
 
 	err = godotenv.Load()
 
