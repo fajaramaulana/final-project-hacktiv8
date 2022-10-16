@@ -20,6 +20,18 @@ func NewSocmedController(socmedService *services.SocmedService, userService *ser
 	return &SocmedController{socmedService: socmedService, userService: userService}
 }
 
+// CreateSocialMedia godoc
+// @Summary Create Social Media
+// @Description Create Social Media
+// @Tags Social Media
+// @Accept  json
+// @Produce  json
+// @Param Authorization header string true "Bearer Token"
+// @Param body body request.CreateSocialMedia true "Create Social Media"
+// @Success 201 {object} view.ResponseCreateSocmed
+// @Failure 400 {object} view.Response
+// @Failure 500 {object} view.ResponseError
+// @Router /socialmedias [post]
 func (c *SocmedController) Create(ctx *gin.Context) {
 	var req request.CreateSocialMedia
 
@@ -58,6 +70,18 @@ func (c *SocmedController) Create(ctx *gin.Context) {
 
 }
 
+// GetSocialMedia godoc
+// @Summary Get Social Media
+// @Description Get Social Media
+// @Tags Social Media
+// @Accept  json
+// @Produce  json
+// @Param Authorization header string true "Bearer Token"
+// @Success 200 {object} view.ResponseGetSocmed
+// @Failure 401 {object} view.ResponseError
+// @Failure 404 {object} view.ResponseError
+// @Failure 500 {object} view.ResponseError
+// @Router /socialmedias [get]
 func (c *SocmedController) Get(ctx *gin.Context) {
 	email := ctx.GetString("email")
 
@@ -89,6 +113,21 @@ func (c *SocmedController) Get(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, data)
 }
 
+// UpdateSocialMedia godoc
+// @Summary Update Social Media
+// @Description Update Social Media
+// @Tags Social Media
+// @Accept  json
+// @Produce  json
+// @Param Authorization header string true "Bearer Token"
+// @Param socialMediaId path int true "Social Media Id"
+// @Param body body request.UpdateSocialMedia true "Update Social Media"
+// @Success 200 {object} view.ResponseUpdateSocmed
+// @Failure 400 {object} view.Response
+// @Failure 401 {object} view.ResponseError
+// @Failure 404 {object} view.ResponseError
+// @Failure 500 {object} view.ResponseError
+// @Router /socialmedias/{socialMediaId} [put]
 func (c *SocmedController) Update(ctx *gin.Context) {
 	var req request.UpdateSocialMedia
 
@@ -139,6 +178,19 @@ func (c *SocmedController) Update(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, data)
 }
 
+// DeleteSocialMedia godoc
+// @Summary Delete Social Media
+// @Description Delete Social Media
+// @Tags Social Media
+// @Accept  json
+// @Produce  json
+// @Param Authorization header string true "Bearer Token"
+// @Param socialMediaId path int true "Social Media Id"
+// @Success 200 {object} view.ResponseDeleteSocmed
+// @Failure 401 {object} view.ResponseError
+// @Failure 404 {object} view.ResponseError
+// @Failure 500 {object} view.ResponseError
+// @Router /socialmedias/{socialMediaId} [delete]
 func (c *SocmedController) Delete(ctx *gin.Context) {
 	idSocmed := ctx.Param("socialMediaId")
 

@@ -4,7 +4,11 @@ import (
 	"final-project/server/controllers"
 	"final-project/server/middleware"
 
+	docs "final-project/docs"
+
 	"github.com/gin-gonic/gin"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 type router struct {
@@ -26,6 +30,7 @@ func NewRouter(user *controllers.UserController, photo *controllers.PhotoControl
 }
 
 func (r *router) SetupRouter(port string) {
+	docs.SwaggerInfo.BasePath = ""
 	user := r.router.Group("/users")
 	user.POST("/register", r.user.Register)
 	user.POST("/login", r.user.Login)
@@ -50,5 +55,6 @@ func (r *router) SetupRouter(port string) {
 	socmed.PUT(":socialMediaId", middleware.Authentication, r.socmed.Update)
 	socmed.DELETE(":socialMediaId", middleware.Authentication, r.socmed.Delete)
 
+	r.router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	r.router.Run(port)
 }

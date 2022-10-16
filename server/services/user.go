@@ -1,6 +1,7 @@
 package services
 
 import (
+	"final-project/server/controllers/view"
 	"final-project/server/repositories"
 	"final-project/server/repositories/models"
 	"final-project/server/request"
@@ -17,11 +18,11 @@ func NewUserService(userRepo repositories.UserRepo) *UserService {
 	return &UserService{userRepo: userRepo}
 }
 
-func (s *UserService) Register(req *request.CreateUserRequest) (map[string]interface{}, error) {
+func (s *UserService) Register(req *request.CreateUserRequest) (view.ResponseRegisterUser, error) {
 	var user models.User
 	hash, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 	if err != nil {
-		return nil, err
+		return view.ResponseRegisterUser{}, err
 	}
 
 	user.Username = req.Username
@@ -33,14 +34,14 @@ func (s *UserService) Register(req *request.CreateUserRequest) (map[string]inter
 	userId, err := s.userRepo.Create(&user)
 
 	if err != nil {
-		return nil, err
+		return view.ResponseRegisterUser{}, err
 	}
 
-	return map[string]interface{}{
-		"age":      user.Age,
-		"email":    user.Email,
-		"id":       userId,
-		"username": user.Username,
+	return view.ResponseRegisterUser{
+		Id:       userId,
+		Username: user.Username,
+		Email:    user.Email,
+		Age:      user.Age,
 	}, nil
 }
 
@@ -59,7 +60,7 @@ func (s *UserService) Login(req *request.UserLoginRequest) (string, error) {
 	return req.Email, nil
 }
 
-func (s *UserService) Update(id int, req *request.UpdateUserRequest) (map[string]interface{}, error) {
+func (s *UserService) Update(id int, req *request.UpdateUserRequest) (view.ResponseUpdateUser, error) {
 	var user models.User
 	user.Username = req.Username
 	user.Email = req.Email
@@ -67,27 +68,27 @@ func (s *UserService) Update(id int, req *request.UpdateUserRequest) (map[string
 	data, err := s.userRepo.UpdateById(id, &user)
 
 	if err != nil {
-		return nil, err
+		return view.ResponseUpdateUser{}, err
 	}
 
-	return map[string]interface{}{
-		"id":         data.Id,
-		"email":      data.Email,
-		"username":   data.Username,
-		"age":        data.Age,
-		"updated_at": data.UpdatedAt,
+	return view.ResponseUpdateUser{
+		Id:        data.Id,
+		Username:  data.Username,
+		Email:     data.Email,
+		Age:       data.Age,
+		UpdatedAt: data.UpdatedAt,
 	}, nil
 }
 
-func (s *UserService) Delete(email string) (map[string]interface{}, error) {
+func (s *UserService) Delete(email string) (view.ResponseDeleteUser, error) {
 	err := s.userRepo.DeleteByEmail(email)
 
 	if err != nil {
-		return nil, err
+		return view.ResponseDeleteUser{}, err
 	}
 
-	return map[string]interface{}{
-		"message": "Your account has been successfully deleted",
+	return view.ResponseDeleteUser{
+		Message: "Your account has been successfully deleted",
 	}, nil
 }
 

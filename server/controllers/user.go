@@ -19,6 +19,17 @@ func NewUserController(service *services.UserService) *UserController {
 	return &UserController{service: service}
 }
 
+// RegisterUser godoc
+// @Summary Register User
+// @Description Register User
+// @Tags User
+// @Accept  json
+// @Produce  json
+// @Param user body request.CreateUserRequest true "User"
+// @Success 201 {object} models.User
+// @Failure 400 {object} view.Response
+// @Failure 500 {object} view.ResponseError
+// @Router /user/register [post]
 func (c *UserController) Register(ctx *gin.Context) {
 	var req request.CreateUserRequest
 
@@ -47,6 +58,17 @@ func (c *UserController) Register(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, user)
 }
 
+// Login godoc
+// @Summary Login User
+// @Description Login User
+// @Tags User
+// @Accept  json
+// @Produce  json
+// @Param user body request.UserLoginRequest true "User"
+// @Success 200 {object} view.ResponseLogin
+// @Failure 400 {object} view.Response
+// @Failure 500 {object} view.ResponseError
+// @Router /user/login [post]
 func (c *UserController) Login(ctx *gin.Context) {
 	var req request.UserLoginRequest
 
@@ -79,11 +101,25 @@ func (c *UserController) Login(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, map[string]interface{}{
-		"token": token,
+	ctx.JSON(http.StatusOK, view.ResponseLogin{
+		Token: token,
 	})
 }
 
+// UpdateUser godoc
+// @Summary Update User
+// @Description Update User
+// @Tags User
+// @Accept  json
+// @Produce  json
+// @Param userid path int true "User ID"
+// @Param user body request.UpdateUserRequest true "User"
+// @Success 200 {object} view.ResponseUpdateUser
+// @Failure 400 {object} view.Response
+// @Failure 401 {object} view.ResponseError
+// @Failure 500 {object} view.ResponseError
+// @Router /user/{userid} [put]
+// @Param Authorization header string true "Insert your access token" default(Bearer <Add access token here>)
 func (c *UserController) Update(ctx *gin.Context) {
 	var req request.UpdateUserRequest
 	email := ctx.GetString("email")
@@ -133,6 +169,18 @@ func (c *UserController) Update(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, user)
 }
 
+// DeleteUser godoc
+// @Summary Delete User
+// @Description Delete User
+// @Tags User
+// @Accept  json
+// @Produce  json
+// @Param userid path int true "User ID"
+// @Success 200 {object} view.ResponseDeleteUser
+// @Failure 401 {object} view.ResponseError
+// @Failure 500 {object} view.ResponseError
+// @Router /user/{userid} [delete]
+// @Param Authorization header string true "Insert your access token" default(Bearer <Add access token here>)
 func (c *UserController) Delete(ctx *gin.Context) {
 	email := ctx.GetString("email")
 

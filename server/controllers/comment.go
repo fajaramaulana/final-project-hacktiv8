@@ -21,6 +21,19 @@ func NewCommentController(commentService *services.CommentService, userService *
 	return &CommentController{commentService: commentService, userService: userService, photoService: photoService}
 }
 
+// CreateComment godoc
+// @Summary Create Comment
+// @Description Create Comment
+// @Tags Comment
+// @Accept  json
+// @Produce  json
+// @Param Authorization header string true "Bearer Token"
+// @Param body body request.CreateCommentRequest true "Create Comment"
+// @Success 201 {object} view.ResponseCreateComment
+// @Failure 400 {object} view.Response
+// @Failure 401 {object} view.ResponseError
+// @Failure 500 {object} view.ResponseError
+// @Router /comment [post]
 func (c *CommentController) Create(ctx *gin.Context) {
 	var req request.CreateCommentRequest
 
@@ -70,6 +83,17 @@ func (c *CommentController) Create(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, data)
 }
 
+// GetAllCommentByUserId godoc
+// @Summary Get All Comment By User Id
+// @Description Get All Comment By User Id
+// @Tags Comment
+// @Accept  json
+// @Produce  json
+// @Param Authorization header string true "Bearer Token"
+// @Success 200 {object} view.ResponseGetAllComment
+// @Failure 401 {object} view.ResponseError
+// @Failure 500 {object} view.ResponseError
+// @Router /comment [get]
 func (c *CommentController) GetAll(ctx *gin.Context) {
 	email := ctx.GetString("email")
 	idUser, err := c.userService.GetUserIdByEmail(email)
@@ -90,6 +114,20 @@ func (c *CommentController) GetAll(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, data)
 }
 
+// UpdateComment godoc
+// @Summary Update Comment
+// @Description Update Comment
+// @Tags Comment
+// @Accept  json
+// @Produce  json
+// @Param Authorization header string true "Bearer Token"
+// @Param commentid path int true "Comment Id"
+// @Param body body request.UpdateCommentRequest true "Update Comment"
+// @Success 200 {object} view.ResponseUpdateComment
+// @Failure 400 {object} view.Response
+// @Failure 401 {object} view.ResponseError
+// @Failure 500 {object} view.ResponseError
+// @Router /comment/{commentid} [put]
 func (c *CommentController) Update(ctx *gin.Context) {
 	var req request.UpdateCommentRequest
 	idComment := ctx.Param("commentid")
@@ -136,6 +174,18 @@ func (c *CommentController) Update(ctx *gin.Context) {
 
 }
 
+// DeleteComment godoc
+// @Summary Delete Comment
+// @Description Delete Comment
+// @Tags Comment
+// @Accept  json
+// @Produce  json
+// @Param Authorization header string true "Bearer Token"
+// @Param commentid path int true "Comment Id"
+// @Success 200 {object} view.ResponseDeleteComment
+// @Failure 401 {object} view.ResponseError
+// @Failure 500 {object} view.ResponseError
+// @Router /comment/{commentid} [delete]
 func (c *CommentController) Delete(ctx *gin.Context) {
 	idComment := ctx.Param("commentid")
 

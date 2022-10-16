@@ -6,6 +6,11 @@ type Response struct {
 	Payload map[string]string `json:"payload,omitempty"`
 }
 
+type ResponseError struct {
+	Status  int    `json:"status"`
+	Message string `json:"message"`
+}
+
 func ErrorValidation(status int, message string, payload map[string]string) *Response {
 	return &Response{
 		Status:  status,

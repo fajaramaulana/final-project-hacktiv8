@@ -20,6 +20,19 @@ func NewPhotoController(photoService *services.PhotoService, userService *servic
 	return &PhotoController{photoService: photoService, userService: userService}
 }
 
+// Createphoto godoc
+// @Summary Create Photo
+// @Description Create Photo
+// @Tags Photo
+// @Accept  json
+// @Produce  json
+// @Param Authorization header string true "Bearer token"
+// @Param body body request.CreatePhotoRequest true "Create Photo"
+// @Success 201 {object} view.ResponseCreatePhoto
+// @Failure 400 {object} view.Response
+// @Failure 401 {object} view.ResponseError
+// @Failure 500 {object} view.ResponseError
+// @Router /photos [post]
 func (c *PhotoController) Create(ctx *gin.Context) {
 	var req request.CreatePhotoRequest
 	email := ctx.GetString("email")
@@ -61,6 +74,17 @@ func (c *PhotoController) Create(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, data)
 }
 
+// GetAllPhoto godoc
+// @Summary Get All Photo
+// @Description Get All Photo
+// @Tags Photo
+// @Accept  json
+// @Produce  json
+// @Param Authorization header string true "Bearer token"
+// @Success 200 {object} view.ResponseGetAllPhoto
+// @Failure 401 {object} view.ResponseError
+// @Failure 500 {object} view.ResponseError
+// @Router /photos [get]
 func (c *PhotoController) GetAll(ctx *gin.Context) {
 	data, err := c.photoService.GetAll()
 
@@ -77,6 +101,20 @@ func (c *PhotoController) GetAll(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, data)
 }
 
+// UpdatePhoto godoc
+// @Summary Update Photo
+// @Description Update Photo
+// @Tags Photo
+// @Accept  json
+// @Produce  json
+// @Param Authorization header string true "Bearer token"
+// @Param photoid path int true "Photo ID"
+// @Param body body request.UpdatePhotoRequest true "Update Photo"
+// @Success 200 {object} view.ResponseUpdatePhoto
+// @Failure 400 {object} view.Response
+// @Failure 401 {object} view.ResponseError
+// @Failure 500 {object} view.ResponseError
+// @Router /photos/{photoid} [put]
 func (c PhotoController) Update(ctx *gin.Context) {
 	var req request.UpdatePhotoRequest
 	id := ctx.Param("photoid")
@@ -127,6 +165,18 @@ func (c PhotoController) Update(ctx *gin.Context) {
 
 }
 
+// DeletePhoto godoc
+// @Summary Delete Photo
+// @Description Delete Photo
+// @Tags Photo
+// @Accept  json
+// @Produce  json
+// @Param Authorization header string true "Bearer token"
+// @Param photoid path int true "Photo ID"
+// @Success 200 {object} view.ResponseDeletePhoto
+// @Failure 401 {object} view.ResponseError
+// @Failure 500 {object} view.ResponseError
+// @Router /photos/{photoid} [delete]
 func (c PhotoController) Delete(ctx *gin.Context) {
 	id := ctx.Param("photoid")
 	email := ctx.GetString("email")
