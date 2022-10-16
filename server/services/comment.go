@@ -39,11 +39,15 @@ func (s *CommentService) Create(idUser int, req *request.CreateCommentRequest) (
 	}, nil
 }
 
-func (s *CommentService) GetAll() ([]view.ResponseGetAllComment, error) {
-	data, err := s.commentRepo.GetAllComment()
+func (s *CommentService) GetAll(idUser int) ([]view.ResponseGetAllComment, error) {
+	data, err := s.commentRepo.GetAllComment(idUser)
 
 	if err != nil {
-		return []view.ResponseGetAllComment{}, err
+		return []view.ResponseGetAllComment{}, errors.New("Unauthorized")
+	}
+
+	if len(data) == 0 {
+		return []view.ResponseGetAllComment{}, errors.New("Comment Not Found")
 	}
 
 	var response []view.ResponseGetAllComment

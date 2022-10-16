@@ -76,7 +76,13 @@ func (c *SocmedController) Get(ctx *gin.Context) {
 	data, err := c.socmedService.Get(idUser)
 
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, view.Error(http.StatusInternalServerError, err.Error()))
+		if err.Error() == "Unauthorized" {
+			ctx.JSON(http.StatusUnauthorized, view.Error(http.StatusUnauthorized, err.Error()))
+		} else if err.Error() == "Social Media Not Found" {
+			ctx.JSON(http.StatusNotFound, view.Error(http.StatusNotFound, err.Error()))
+		} else {
+			ctx.JSON(http.StatusInternalServerError, view.Error(http.StatusInternalServerError, err.Error()))
+		}
 		return
 	}
 

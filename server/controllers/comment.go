@@ -71,15 +71,19 @@ func (c *CommentController) Create(ctx *gin.Context) {
 }
 
 func (c *CommentController) GetAll(ctx *gin.Context) {
-	data, err := c.commentService.GetAll()
+	email := ctx.GetString("email")
+	idUser, err := c.userService.GetUserIdByEmail(email)
+
+	data, err := c.commentService.GetAll(idUser)
 
 	if err != nil {
 		if err.Error() == "Unauthorized" {
 			ctx.JSON(http.StatusUnauthorized, view.Error(http.StatusUnauthorized, err.Error()))
-			return
+		} else if err.Error() == "Comment Not Found" {
+			ctx.JSON(http.StatusNotFound, view.Error(http.StatusNotFound, err.Error()))
+		} else {
+			ctx.JSON(http.StatusInternalServerError, view.Error(http.StatusInternalServerError, err.Error()))
 		}
-
-		ctx.JSON(http.StatusInternalServerError, view.Error(http.StatusInternalServerError, err.Error()))
 		return
 	}
 

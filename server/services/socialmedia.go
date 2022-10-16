@@ -45,6 +45,10 @@ func (s *SocmedService) Get(idUser int) (view.ReturnGetSocmed, error) {
 		return view.ReturnGetSocmed{}, err
 	}
 
+	if len(data) == 0 {
+		return view.ReturnGetSocmed{}, errors.New("Social Media Not Found")
+	}
+
 	var response []view.ResponseGetSocmed
 
 	for _, v := range data {

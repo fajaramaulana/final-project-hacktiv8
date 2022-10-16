@@ -23,14 +23,14 @@ func (r *commentRepo) Create(comment *models.Comment) (*models.Comment, error) {
 	return comment, err
 }
 
-func (r *commentRepo) GetAllComment() ([]models.Comment, error) {
+func (r *commentRepo) GetAllComment(idUser int) ([]models.Comment, error) {
 	var comment []models.Comment
-	err := r.db.Preload(clause.Associations).Find(&comment).Error
+	err := r.db.Preload(clause.Associations).Where("user_id = ?", idUser).Find(&comment).Error
 	return comment, err
 }
 
 func (r *commentRepo) UpdateCommentById(id int, comment *models.Comment) (*models.Comment, error) {
-	if err := r.db.Debug().Where("id = ?", id).Updates(&comment).Preload(clause.Associations).Find(&comment).Error; err != nil {
+	if err := r.db.Where("id = ?", id).Updates(&comment).Preload(clause.Associations).Find(&comment).Error; err != nil {
 		return nil, err
 	}
 
