@@ -47,6 +47,8 @@ func (r *router) SetupRouter(port string) {
 	socmed := r.router.Group("/socialmedias")
 	socmed.POST("", middleware.Authentication, r.socmed.Create)
 	socmed.GET("", middleware.Authentication, r.socmed.Get)
+	socmed.PUT(":socialMediaId", middleware.Authentication, r.socmed.Update)
+	socmed.DELETE(":socialMediaId", middleware.Authentication, r.socmed.Delete)
 
 	r.router.Run(port)
 }

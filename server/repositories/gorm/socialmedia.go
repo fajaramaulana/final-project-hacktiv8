@@ -35,8 +35,21 @@ func (r *socialMediaRepo) GetSocmedByUserId(id int) ([]models.SocialMedia, error
 	return socialMedia, err
 }
 
-func (r *socialMediaRepo) UpdateSocialMediaById(id int, socialMedia *models.SocialMedia) error {
-	return r.db.Where("id = ?", id).Updates(socialMedia).Error
+func (r *socialMediaRepo) CheckSocmedByIdAndUserId(id int, userId int) (bool, error) {
+	var socialMedia models.SocialMedia
+	err := r.db.Where("id = ? AND user_id = ?", id, userId).First(&socialMedia).Error
+	if err != nil {
+		return false, err
+	}
+	return true, nil
+}
+
+func (r *socialMediaRepo) UpdateSocialMediaById(id int, socialMedia *models.SocialMedia) (*models.SocialMedia, error) {
+	if err := r.db.Debug().Where("id = ?", id).Updates(&socialMedia).First(&socialMedia).Error; err != nil {
+		return nil, err
+	}
+
+	return socialMedia, nil
 }
 
 func (r *socialMediaRepo) DeleteSocialMediaById(id int) error {
