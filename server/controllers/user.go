@@ -121,6 +121,11 @@ func (c *UserController) Update(ctx *gin.Context) {
 	user, err := c.service.Update(convertedUserIdParams, &req)
 
 	if err != nil {
+		if err.Error() == "Unauthorized" {
+			ctx.JSON(http.StatusUnauthorized, view.Error(http.StatusUnauthorized, err.Error()))
+			return
+		}
+
 		ctx.JSON(http.StatusInternalServerError, view.Error(http.StatusInternalServerError, err.Error()))
 		return
 	}
@@ -134,6 +139,11 @@ func (c *UserController) Delete(ctx *gin.Context) {
 	data, err := c.service.Delete(email)
 
 	if err != nil {
+		if err.Error() == "Unauthorized" {
+			ctx.JSON(http.StatusUnauthorized, view.Error(http.StatusUnauthorized, err.Error()))
+			return
+		}
+
 		ctx.JSON(http.StatusInternalServerError, view.Error(http.StatusInternalServerError, err.Error()))
 		return
 	}

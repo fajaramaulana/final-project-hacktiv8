@@ -49,6 +49,11 @@ func (c *PhotoController) Create(ctx *gin.Context) {
 	data, err := c.photoService.Create(&req, idUser)
 
 	if err != nil {
+		if err.Error() == "Unauthorized" {
+			ctx.JSON(http.StatusUnauthorized, view.Error(http.StatusUnauthorized, err.Error()))
+			return
+		}
+
 		ctx.JSON(http.StatusInternalServerError, view.Error(http.StatusInternalServerError, err.Error()))
 		return
 	}
@@ -60,6 +65,11 @@ func (c *PhotoController) GetAll(ctx *gin.Context) {
 	data, err := c.photoService.GetAll()
 
 	if err != nil {
+		if err.Error() == "Unauthorized" {
+			ctx.JSON(http.StatusUnauthorized, view.Error(http.StatusUnauthorized, err.Error()))
+			return
+		}
+
 		ctx.JSON(http.StatusInternalServerError, view.Error(http.StatusInternalServerError, err.Error()))
 		return
 	}
@@ -104,6 +114,11 @@ func (c PhotoController) Update(ctx *gin.Context) {
 	data, err := c.photoService.Update(&req, idPhoto, userId)
 
 	if err != nil {
+		if err.Error() == "Unauthorized" {
+			ctx.JSON(http.StatusUnauthorized, view.Error(http.StatusUnauthorized, err.Error()))
+			return
+		}
+
 		ctx.JSON(http.StatusInternalServerError, view.Error(http.StatusInternalServerError, err.Error()))
 		return
 	}
@@ -133,6 +148,11 @@ func (c PhotoController) Delete(ctx *gin.Context) {
 	data, err := c.photoService.Delete(idPhoto, userId)
 
 	if err != nil {
+		if err.Error() == "Unauthorized" {
+			ctx.JSON(http.StatusUnauthorized, view.Error(http.StatusUnauthorized, err.Error()))
+			return
+		}
+
 		ctx.JSON(http.StatusInternalServerError, view.Error(http.StatusInternalServerError, err.Error()))
 		return
 	}

@@ -58,6 +58,11 @@ func (c *CommentController) Create(ctx *gin.Context) {
 	data, err := c.commentService.Create(idUser, &req)
 
 	if err != nil {
+		if err.Error() == "Unauthorized" {
+			ctx.JSON(http.StatusUnauthorized, view.Error(http.StatusUnauthorized, err.Error()))
+			return
+		}
+
 		ctx.JSON(http.StatusInternalServerError, view.Error(http.StatusInternalServerError, err.Error()))
 		return
 	}
@@ -69,6 +74,11 @@ func (c *CommentController) GetAll(ctx *gin.Context) {
 	data, err := c.commentService.GetAll()
 
 	if err != nil {
+		if err.Error() == "Unauthorized" {
+			ctx.JSON(http.StatusUnauthorized, view.Error(http.StatusUnauthorized, err.Error()))
+			return
+		}
+
 		ctx.JSON(http.StatusInternalServerError, view.Error(http.StatusInternalServerError, err.Error()))
 		return
 	}
@@ -109,6 +119,11 @@ func (c *CommentController) Update(ctx *gin.Context) {
 	data, err := c.commentService.Update(idUser, commentId, &req)
 
 	if err != nil {
+		if err.Error() == "Unauthorized" {
+			ctx.JSON(http.StatusUnauthorized, view.Error(http.StatusUnauthorized, err.Error()))
+			return
+		}
+
 		ctx.JSON(http.StatusInternalServerError, view.Error(http.StatusInternalServerError, err.Error()))
 		return
 	}
@@ -134,6 +149,11 @@ func (c *CommentController) Delete(ctx *gin.Context) {
 	err = c.commentService.Delete(idUser, commentId)
 
 	if err != nil {
+		if err.Error() == "Unauthorized" {
+			ctx.JSON(http.StatusUnauthorized, view.Error(http.StatusUnauthorized, err.Error()))
+			return
+		}
+
 		ctx.JSON(http.StatusInternalServerError, view.Error(http.StatusInternalServerError, err.Error()))
 		return
 	}
