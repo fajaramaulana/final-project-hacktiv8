@@ -440,8 +440,19 @@ definitions:
       username:
         type: string
     type: object
+host: localhost:8081
 info:
-  contact: {}
+  contact:
+    email: fajaramaulana.dev@gmail.com
+    name: Swagger API Team
+    url: http://swagger.io
+  description: Hacktiv8 Scalable Web Service with Golang Final Project
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: MyGram API
+  version: "1.0"
 paths:
   /comments:
     get:
