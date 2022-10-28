@@ -1,92 +1,4 @@
 definitions:
-  models.Comment:
-    properties:
-      createdAt:
-        type: string
-      id:
-        type: integer
-      message:
-        type: string
-      photo:
-        $ref: '#/definitions/models.Photo'
-      photoId:
-        type: integer
-      updatedAt:
-        type: string
-      user:
-        $ref: '#/definitions/models.User'
-      userId:
-        type: integer
-    type: object
-  models.Photo:
-    properties:
-      caption:
-        type: string
-      comments:
-        items:
-          $ref: '#/definitions/models.Comment'
-        type: array
-      createdAt:
-        type: string
-      id:
-        type: integer
-      photoUrl:
-        type: string
-      title:
-        type: string
-      updatedAt:
-        type: string
-      user:
-        $ref: '#/definitions/models.User'
-      userId:
-        type: integer
-    type: object
-  models.SocialMedia:
-    properties:
-      createdAt:
-        type: string
-      id:
-        type: integer
-      name:
-        type: string
-      socialMediaUrl:
-        type: string
-      updatedAt:
-        type: string
-      user:
-        $ref: '#/definitions/models.User'
-      userId:
-        type: integer
-    type: object
-  models.User:
-    properties:
-      age:
-        type: integer
-      comments:
-        items:
-          $ref: '#/definitions/models.Comment'
-        type: array
-      createdAt:
-        type: string
-      email:
-        type: string
-      id:
-        type: integer
-      password:
-        type: string
-      photos:
-        items:
-          $ref: '#/definitions/models.Photo'
-        type: array
-      socialMedias:
-        items:
-          $ref: '#/definitions/models.SocialMedia'
-        type: array
-      updatedAt:
-        type: string
-      username:
-        type: string
-    type: object
   request.CreateCommentRequest:
     properties:
       message:
@@ -288,25 +200,27 @@ definitions:
     type: object
   view.ResponseGetAllComment:
     properties:
+      Photo:
+        $ref: '#/definitions/view.ResponseWithPhotoIdComment'
+      User:
+        $ref: '#/definitions/view.ResponseWithUserIdComment'
       created_at:
         type: string
       id:
         type: integer
       message:
         type: string
-      photo:
-        $ref: '#/definitions/view.ResponseWithPhotoIdComment'
       photo_id:
         type: integer
       updated_at:
         type: string
-      user:
-        $ref: '#/definitions/view.ResponseWithUserIdComment'
       user_id:
         type: integer
     type: object
   view.ResponseGetAllPhoto:
     properties:
+      User:
+        $ref: '#/definitions/view.ResponseWithUserId'
       caption:
         type: string
       created_at:
@@ -319,8 +233,6 @@ definitions:
         type: string
       updated_at:
         type: string
-      user:
-        $ref: '#/definitions/view.ResponseWithUserId'
       user_id:
         type: integer
     type: object
@@ -344,6 +256,17 @@ definitions:
   view.ResponseLogin:
     properties:
       token:
+        type: string
+    type: object
+  view.ResponseRegisterUser:
+    properties:
+      age:
+        type: integer
+      email:
+        type: string
+      id:
+        type: integer
+      username:
         type: string
     type: object
   view.ResponseUpdateComment:
@@ -439,6 +362,13 @@ definitions:
         type: string
       username:
         type: string
+    type: object
+  view.ReturnGetSocmed:
+    properties:
+      social_medias:
+        items:
+          $ref: '#/definitions/view.ResponseGetSocmed'
+        type: array
     type: object
 host: localhost:8081
 info:
@@ -768,7 +698,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/view.ResponseGetSocmed'
+            $ref: '#/definitions/view.ReturnGetSocmed'
         "401":
           description: Unauthorized
           schema:
@@ -1029,7 +959,7 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/models.User'
+            $ref: '#/definitions/view.ResponseRegisterUser'
         "400":
           description: Bad Request
           schema:

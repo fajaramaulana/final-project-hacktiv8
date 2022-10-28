@@ -26,7 +26,7 @@ func NewUserController(service *services.UserService) *UserController {
 // @Accept  json
 // @Produce  json
 // @Param user body request.CreateUserRequest true "User"
-// @Success 201 {object} models.User
+// @Success 201 {object} view.ResponseRegisterUser
 // @Failure 400 {object} view.Response
 // @Failure 500 {object} view.ResponseError
 // @Router /users/register [post]

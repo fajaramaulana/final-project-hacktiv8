@@ -492,7 +492,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/view.ResponseGetSocmed"
+                            "$ref": "#/definitions/view.ReturnGetSocmed"
                         }
                     },
                     "401": {
@@ -816,7 +816,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/models.User"
+                            "$ref": "#/definitions/view.ResponseRegisterUser"
                         }
                     },
                     "400": {
@@ -903,140 +903,6 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "models.Comment": {
-            "type": "object",
-            "properties": {
-                "createdAt": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "message": {
-                    "type": "string"
-                },
-                "photo": {
-                    "$ref": "#/definitions/models.Photo"
-                },
-                "photoId": {
-                    "type": "integer"
-                },
-                "updatedAt": {
-                    "type": "string"
-                },
-                "user": {
-                    "$ref": "#/definitions/models.User"
-                },
-                "userId": {
-                    "type": "integer"
-                }
-            }
-        },
-        "models.Photo": {
-            "type": "object",
-            "properties": {
-                "caption": {
-                    "type": "string"
-                },
-                "comments": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.Comment"
-                    }
-                },
-                "createdAt": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "photoUrl": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                },
-                "updatedAt": {
-                    "type": "string"
-                },
-                "user": {
-                    "$ref": "#/definitions/models.User"
-                },
-                "userId": {
-                    "type": "integer"
-                }
-            }
-        },
-        "models.SocialMedia": {
-            "type": "object",
-            "properties": {
-                "createdAt": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "socialMediaUrl": {
-                    "type": "string"
-                },
-                "updatedAt": {
-                    "type": "string"
-                },
-                "user": {
-                    "$ref": "#/definitions/models.User"
-                },
-                "userId": {
-                    "type": "integer"
-                }
-            }
-        },
-        "models.User": {
-            "type": "object",
-            "properties": {
-                "age": {
-                    "type": "integer"
-                },
-                "comments": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.Comment"
-                    }
-                },
-                "createdAt": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "password": {
-                    "type": "string"
-                },
-                "photos": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.Photo"
-                    }
-                },
-                "socialMedias": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.SocialMedia"
-                    }
-                },
-                "updatedAt": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
         "request.CreateCommentRequest": {
             "type": "object",
             "required": [
@@ -1331,6 +1197,12 @@ const docTemplate = `{
         "view.ResponseGetAllComment": {
             "type": "object",
             "properties": {
+                "Photo": {
+                    "$ref": "#/definitions/view.ResponseWithPhotoIdComment"
+                },
+                "User": {
+                    "$ref": "#/definitions/view.ResponseWithUserIdComment"
+                },
                 "created_at": {
                     "type": "string"
                 },
@@ -1340,17 +1212,11 @@ const docTemplate = `{
                 "message": {
                     "type": "string"
                 },
-                "photo": {
-                    "$ref": "#/definitions/view.ResponseWithPhotoIdComment"
-                },
                 "photo_id": {
                     "type": "integer"
                 },
                 "updated_at": {
                     "type": "string"
-                },
-                "user": {
-                    "$ref": "#/definitions/view.ResponseWithUserIdComment"
                 },
                 "user_id": {
                     "type": "integer"
@@ -1360,6 +1226,9 @@ const docTemplate = `{
         "view.ResponseGetAllPhoto": {
             "type": "object",
             "properties": {
+                "User": {
+                    "$ref": "#/definitions/view.ResponseWithUserId"
+                },
                 "caption": {
                     "type": "string"
                 },
@@ -1377,9 +1246,6 @@ const docTemplate = `{
                 },
                 "updated_at": {
                     "type": "string"
-                },
-                "user": {
-                    "$ref": "#/definitions/view.ResponseWithUserId"
                 },
                 "user_id": {
                     "type": "integer"
@@ -1416,6 +1282,23 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "token": {
+                    "type": "string"
+                }
+            }
+        },
+        "view.ResponseRegisterUser": {
+            "type": "object",
+            "properties": {
+                "age": {
+                    "type": "integer"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "username": {
                     "type": "string"
                 }
             }
@@ -1562,6 +1445,17 @@ const docTemplate = `{
                 },
                 "username": {
                     "type": "string"
+                }
+            }
+        },
+        "view.ReturnGetSocmed": {
+            "type": "object",
+            "properties": {
+                "social_medias": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/view.ResponseGetSocmed"
+                    }
                 }
             }
         }

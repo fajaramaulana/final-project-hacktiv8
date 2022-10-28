@@ -77,7 +77,7 @@ func (c *SocmedController) Create(ctx *gin.Context) {
 // @Accept  json
 // @Produce  json
 // @Param Authorization header string true "Insert your access token" default(Bearer <Add access token here>)
-// @Success 200 {object} view.ResponseGetSocmed
+// @Success 200 {object} view.ReturnGetSocmed
 // @Failure 401 {object} view.ResponseError
 // @Failure 404 {object} view.ResponseError
 // @Failure 500 {object} view.ResponseError
